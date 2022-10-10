@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+JOIN_WAIT=3
 BASE_URI="https://api.zerotier.com/api/v1"
 TMP_OUTPUT="/tmp/member.json"
 
@@ -53,6 +54,9 @@ case "${ACTION}" in
 
         log "Joining network: ${OUTPUT_CLEAR} ${OUTPUT_BOLD}${NETWORK}"
         zerotier-cli join ${NETWORK}
+
+        log "Giving ZeroTier a chance to register host properly by waiting ${JOIN_WAIT} seconds"
+        sleep ${JOIN_WAIT}
 
         log "Getting actual host: ${ZEROTIER_ID} status for Network: ${NETWORK}"
         cmd="curl -s -N -X GET \
