@@ -49,6 +49,9 @@ case "${ACTION}" in
         ZEROTIER_ID=$(sudo zerotier-cli info | cut -d ' ' -f 3)
         log "Host ID: ${ZEROTIER_ID}"
 
+        log "Joining network: ${NETWORK}"
+        zerotier-cli join ${NETWORK}
+
         log "Getting actual host: ${ZEROTIER_ID} status for Network: ${NETWORK}"
         cmd="curl -s -N -X GET \
             ${BASE_URI}/network/${NETWORK}/member/${ZEROTIER_ID} \
