@@ -38,18 +38,20 @@ TOKEN=${3}
 
 case "${ACTION}" in
     "install")
-        log "Installing ZeroTier and joining Network:${OUTPUT_CLEAR} ${OUTPUT_BOLD}${NETWORK}"
-        curl -s https://install.zerotier.com | sudo bash
-
         if [[ ! $(command -v zerotier-cli) ]]; then
-            error "ZeroTier not installed properly?"
-            exit 1
+            log "Installing ZeroTier..."
+            curl -s https://install.zerotier.com | sudo bash
+
+            if [[ ! $(command -v zerotier-cli) ]]; then
+                error "ZeroTier not installed properly?"
+                exit 1
+            fi
         fi
 
         ZEROTIER_ID=$(sudo zerotier-cli info | cut -d ' ' -f 3)
         log "Host ID: ${ZEROTIER_ID}"
 
-        log "Joining network: ${NETWORK}"
+        log "Joining network: ${OUTPUT_CLEAR} ${OUTPUT_BOLD}${NETWORK}"
         zerotier-cli join ${NETWORK}
 
         log "Getting actual host: ${ZEROTIER_ID} status for Network: ${NETWORK}"
